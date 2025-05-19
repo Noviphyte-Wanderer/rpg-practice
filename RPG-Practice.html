@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, intiial-scale=1.0"/>
+        <title>RPG - Practice</title>
+        <link rel="stylesheet" href="RPG-Practice.css"/>
+    </head>
+    <body>
+        <div id="game">
+            <div id="title">
+            <span class="gameText" id="gameTitle">RPG PRACTICE</span>
+            </div>
+            <div id="text-section">
+            <div id="text">
+                
+            </div>
+            </div> 
+            <div id="dynamic-section">
+            <div id="short-stats">
+                <span class="stat" id="battle-level">Lv: <strong><span id="levelText"></span></strong></span>
+                <span class="stat" id="xp">XP: <strong><span id="xpText"></span></strong></span>
+                <span class="stat" id="health">Health: <strong><span id="health-text"></span></strong> / <strong><span id="max-health-text"></span></strong></span>
+                <span class="stat" id="gold">Gold: <strong><span id="goldText"></span></strong></span>
+            </div>
+            <div id="battle-stats" class="hide">
+                <span class="battle-stats-section" id="battle-stats-title">STATS </span>
+                <span class="stat battle-stat" id="strength">STR: <strong><span id="strength-text"></span></strong></span>
+                <span class="stat battle-stat" id="defense">DEF: <strong><span id="defense-text"></span></strong></span>
+            </div>
+            <div id="inventory" class="hide">
+                <span class="inventory" id="inventory-title">INVENTORY</span>
+                <div class="hide" id="inventory-list">
+                </div>
+            </div>
+            </div>
+            <div id="store-section" class="hide">
+            <span class="store" id="store-section-title">STORE</span>
+        
+            </div>
+            <div id="controls">
+            <button id="button1">Go to Menu</button>
+            <button id="button2">Go to Store</button>
+            <button id="button3">Go to Home</button>
+            <button id="button4">Go to Forest</button>
+            </div>
+        
+        </div>
+        <footer>
+            <p>V0.0.13 Alpha</p>
+        </footer>
+        <script src="RPG-Practice.js"></script>
+    </body>
+</html>

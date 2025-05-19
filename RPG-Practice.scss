@@ -1,0 +1,190 @@
+*{
+    box-sizing: border-box;
+}
+
+@mixin button-colors($gradient, $borders){
+  background-image: $gradient;
+  border: 3px solid $borders;
+  
+}
+$button-normal: linear-gradient(
+  #05566a,
+  #033448
+);
+$button-battle: linear-gradient(
+  #a83604,
+  #761400
+);
+
+:root{
+    --game-background: #fff;
+    --game-text: #fff;
+    --game-title: #000;
+    --game-borders: #000;
+    --title-background: #96a098;
+    --page-background: #768769;
+    --textbox-color: #070;
+}
+
+body{
+    background-color: var(--page-background);
+}
+
+#game{
+    background-color: var(--game-background);
+    max-width: 750px;
+    max-height: 900px;
+    margin: 100px auto 0px;
+    padding: 15px;
+}
+/* TITLE SECTION */
+#title{
+    color: var(--game-title);
+    background-color: var(--title-background);
+    padding: 15px;
+    #gameTitle{
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      font-size: 2.5rem;
+    }
+}
+
+
+/* STATS SECTION & CONTROLS*/
+#controls, #short-stats, #battle-stats{
+    border: 1px solid #000;
+    color: #000;
+    padding: 7px;
+}
+
+#short-stats{
+    display: none;
+}
+
+.stat{
+    padding-right: 5px;
+    font-size: 1.25rem;
+}
+
+#battle-level{
+    font-size: 2rem;
+    display: block;
+}
+
+#max-health-hext{
+    color: #0c0;
+}
+#goldText{
+    color: rgb(122, 94, 22);
+}
+#battle-stats{
+    display: none;
+    flex-direction: column;
+    color: black;
+    padding: 10px;
+    &-title{
+        font-size: 1.75rem;
+        border-bottom: 1px solid black;
+        margin: 10px;
+    }
+   .battle-stat {
+        
+        width: 100%;
+        display: block;
+        padding:  0px 10px;
+    }
+} 
+
+#text-section{
+    border: 5px solid black;
+    height: 12.5em;
+    #text{
+        color: var(--game-text);
+        background-color: var(--textbox-color);
+        padding: 20px;
+        font-size: 1.25em;
+        border: 10px double white;
+        font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      height: 100%;
+    }
+}
+
+/* GENERAL LIST STYLES*/
+.list{
+    border: 1px solid black;
+    padding: 10px;
+  &-column{
+    height: 200px;
+    width: 50%;
+    border: 0;
+  }
+  &-item{
+      height: 40px;
+      width: 100%;
+      padding: 8px;
+      padding-left: 10px;
+      border: 1px solid black;
+  }
+}
+
+/* INVENTORY SECTION*/
+#inventory{
+    border: 1px solid black;
+    padding: 10px;
+    display: none;
+    
+    &-title{
+      /*color: black;*/
+      font-size: 1.75rem;
+      border-bottom: 1px solid black;
+      margin: 10px;
+    }
+    &-list{
+      border: 1px solid black;
+      display: flex;
+      flex-direction: row;
+      margin-top: 10px;
+      height: 400px;
+    }
+}
+
+
+
+.inventory-item{
+    color: black;
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+/* BUTTONS SECTION*/
+button{
+    color: var(--game-text);
+    @include button-colors($button-normal, #033559);
+    padding: 20px;
+    font-size: 1.125rem;
+    cursor: pointer;
+}
+
+/* STORE SECTION */
+#store-section{
+    width: 100%;
+    height: 100px;
+    border: 1px solid black;
+    padding: 10px;
+    display: none;
+    &-title{
+      border-bottom: 1px solid black;
+      color: black;
+      width: 100px;
+      height: 50px;
+      font-size: 1.75rem;
+      margin: 10px;
+  }
+}
+
+
+/* FOOTER SECTION */
+footer{
+    font-size: 1.75rem;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+}
