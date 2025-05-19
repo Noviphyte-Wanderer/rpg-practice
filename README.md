@@ -1,2 +1,4 @@
-# rpg-practice
-Based/Inspired by the Dragon Repeller tutorial from freeCodeamp
+# RPG Practice
+## Began on September 2024.
+## Description.
+
