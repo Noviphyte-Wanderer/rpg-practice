@@ -5,7 +5,6 @@
 @mixin button-colors($gradient, $borders){
   background-image: $gradient;
   border: 3px solid $borders;
-  
 }
 $button-normal: linear-gradient(
   #05566a,
@@ -28,37 +27,52 @@ $button-battle: linear-gradient(
 
 body{
     background-color: var(--page-background);
+    transition: background-color 0.5s;
 }
 
 #game{
-    background-color: var(--game-background);
-    max-width: 750px;
-    max-height: 900px;
-    margin: 100px auto 0px;
-    padding: 15px;
-}
-/* TITLE SECTION */
-#title{
+  background-color: var(--game-background);
+  max-width: 750px;
+  margin: 100px auto 0px;
+  padding: 15px;
+  
+  /* TITLE SECTION */
+  #title{
     color: var(--game-title);
     background-color: var(--title-background);
     padding: 15px;
     #gameTitle{
-      font-family: Georgia, 'Times New Roman', Times, serif;
+      font-family: "Roboto Mono", system-ui;
+      font-weight: bold;
       font-size: 2.5rem;
     }
+  }
+  // TEXT SECTION
+  #text-section{
+    border: 5px solid black;
+    height: 12.5em;
+    #text{
+      color: var(--game-text);
+      background-color: var(--textbox-color);
+      padding: 20px;
+      font-size: 1.25em;
+      border: 10px double white;
+      font-family: 'Lucida Sans', sans-serif;
+      height: 100%;
+    }
+  }
 }
 
-
 /* STATS SECTION & CONTROLS*/
+#dynamic-section{
+  font-family: "Roboto Mono", system-ui;
+}
 #controls, #short-stats, #battle-stats{
     border: 1px solid #000;
     color: #000;
     padding: 7px;
 }
 
-#short-stats{
-    display: none;
-}
 
 .stat{
     padding-right: 5px;
@@ -70,14 +84,14 @@ body{
     display: block;
 }
 
-#max-health-hext{
-    color: #0c0;
+#max-health-text{
+    color: #090;
 }
-#goldText{
+#gold-text{
     color: rgb(122, 94, 22);
 }
 #battle-stats{
-    display: none;
+    
     flex-direction: column;
     color: black;
     padding: 10px;
@@ -94,19 +108,7 @@ body{
     }
 } 
 
-#text-section{
-    border: 5px solid black;
-    height: 12.5em;
-    #text{
-        color: var(--game-text);
-        background-color: var(--textbox-color);
-        padding: 20px;
-        font-size: 1.25em;
-        border: 10px double white;
-        font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-      height: 100%;
-    }
-}
+
 
 /* GENERAL LIST STYLES*/
 .list{
@@ -130,7 +132,6 @@ body{
 #inventory{
     border: 1px solid black;
     padding: 10px;
-    display: none;
     
     &-title{
       /*color: black;*/
@@ -170,7 +171,6 @@ button{
     height: 100px;
     border: 1px solid black;
     padding: 10px;
-    display: none;
     &-title{
       border-bottom: 1px solid black;
       color: black;
@@ -181,10 +181,10 @@ button{
   }
 }
 
-
-/* FOOTER SECTION */
-footer{
-    font-size: 1.75rem;
-    font-family:Verdana, Geneva, Tahoma, sans-serif;
-    font-weight: bold;
+// Helper Classes
+.hide{
+  display: none;
 }
+
+
+
