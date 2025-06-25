@@ -9,12 +9,56 @@ let self = {
       health: 25,
       maxHealth: 25
     },
-    gold: 20
-}
-class Button {
-    
+    gold: 20,
+    inventory: ["Sword", "Shield", "Potion", "Elixir", "Staff", "Dagger"]
 }
 
+// All DOM references of the player's stats.
+const statSelectors = {
+  strengthText: document.getElementById('strength-text'),
+  defenseText: document.getElementById('defense-text'),
+  xpText: document.querySelector('#xpText'), 
+  levelText: document.getElementById('level-text'),
+  goldText: document.getElementById('gold-text'),
+  healthText: document.getElementById('health-text'),
+  maxHealthText: document.getElementById('max-health-text')
+};
+
+// All DOM references to the games's dynamic section.
+const sectionSelectors = {
+  shortStats: document.getElementById('short-stats'),
+  battleStats: document.getElementById('battle-stats'),
+  controlSection: document.getElementById('controls'),
+  inventorySection: document.getElementById('inventory'),
+  inventoryList: document.getElementById('inventory-list'),
+  storeSection: document.getElementById("store-section")
+}
+
+// HTML references
+const rootPointer = document.querySelector(":root");
+
+// The blueprint for a button in the control section.
+class Button {
+  constructor(id, btnFunction, btnLabel, additionalStyles = ""){
+    this.id = id;
+    this.btnFunction = btnFunction;
+    this.btnLabel = btnLabel;
+    this.additionalStyles = additionalStyles;
+  }
+  renderBtn(){
+    return `
+      <button id="${this.id}" ${this.additionalStyles ? `style="${this.additionalStyles}"` : ""}>${this.btnLabel}</button>
+    `;
+  }
+  getFunction(){
+    return this.btnFunction;
+  }
+  getID(){
+    return this.id;
+  }
+}
+
+// Blueprint for each item.
 class Item {
   constructor(name, type, number = 1, stackable = false){
     this.name = name;
@@ -23,15 +67,8 @@ class Item {
     this.stackable = stackable;
   }
 }
-/*
-const item = {
-  name: yaddaYadda,
-  type: weapons, items, miscellanous,
-  number: (If it is stackable, else x1),
-  stackable: boolean (Can it be stacked or not?)
-};
-*/
-let gold = 20;
+
+// Sample inventory.
 let inventory = ["Sword", "Shield", "Potion", "Elixir", "Staff", "Dagger"];
 const maxInventory = 20;
 
@@ -56,96 +93,79 @@ const armorList = [
   { name: "bronze shoulder platings", defense: 3}
 ]
 
-//Begins Game Function
-const beginGame = () => {
-  update(locations[1]);
+// Helper Function
+function cleanControls() {
+  sectionSelectors.controlSection.innerHTML = "";
 }
 
-const locations = [
+// Locations/Rooms Array
+const locationSet = [
   {
     name: "startmenu",
-    "button text": ["Begin game", "", "", ""],
-    "button functions": [beginGame, null, null, null],
-    "button style display": ["inline", "none", "none", "none"],
+    buttons: [new Button("start", beginGame, "BEGIN GAME", "display: block; margin: auto;")],
     text: "Welcome to the RPG test game. I'm currently building something in the moment, so just hang tight and enjoy. Take a look around if you want.",
     colorPalette: () => {
-      document.querySelector(':root').style.setProperty('--page-background', '#444');
-      document.querySelector(':root').style.setProperty('--textbox-color', '#090');
-      document.querySelector(':root').style.setProperty('--game-text', "#fff");
+      rootPointer.style.setProperty('--page-background', '#444');
+      rootPointer.style.setProperty('--textbox-color', '#090');
+      rootPointer.style.setProperty('--game-text', "#fff");
     }
   },  
   {
     name: "overworld",
-    "button text": ["Go to menu", "Go to Store", "Go to Home", "Go to Forest"],
-    "button functions": [goMenu, goStore, goHome, goForest],
-    "button style display": ['inline', 'inline', 'inline', 'inline'],
+    buttons: [
+      new Button("go-menu", goMenu, "Go to menu"),
+      new Button("go-store", goStore, "Go to Store"),
+      new Button("go-home", goHome, "Go to Home"),
+      new Button("go-forest", goForest, "Go to Forest")
+    ],
     text: "Welcome back to the overworld.",
     colorPalette: () => {
-      document.querySelector(':root').style.setProperty('--page-background', '#768769');
-      document.querySelector(':root').style.setProperty('--textbox-color', '#070');
-      document.querySelector(':root').style.setProperty('--game-text', "#fff");
+      rootPointer.style.setProperty('--page-background', '#768769');
+      rootPointer.style.setProperty('--textbox-color', '#070');
+      rootPointer.style.setProperty('--game-text', "#fff");
 
     }
   },
   {
     name: "menu",
-    "button text": ["Check Stats", "Check Inventory", "Exit Menu", ""],
-    "button functions": [checkStats, checkInventory, backToPlay, null],
-    "button style display": ['inline', 'inline', 'inline', 'none'],
+    buttons: [
+      new Button('check-stats', checkStats, "Check Stats"),
+      new Button('check-inventory', checkInventory, "Check Inventory"),
+      new Button('exit-menu', backToPlay, "Exit Menu")
+    ],
     text: "This is the menu screen.",
     colorPalette: () => {
       document.querySelector(':root').style.setProperty('--page-background', '#253428');
       document.querySelector(':root').style.setProperty('--textbox-color', '#545');
       document.querySelector(':root').style.setProperty('--game-text', "#fff");
-
     }
-
   },
   {
     name: "store",
-    "button text": ["Buy Items", "Buy Weapons", "Sell", "Exit Store"],
-    "button functions": [buyItems, buyWeapons, sellStuff, backToPlay],
-    "button style display": ['inline', 'inline', 'inline', 'inline'],
+    buttons: [
+      new Button('buy-items', buyItems, "Buy Items"),
+      new Button('buy-weapons', buyWeapons, "Buy Weapons"),
+      new Button('sell', sellStuff, "Sell"),
+      new Button('exit-store', backToPlay, "Exit Store")
+    ],
     text: "Welcome to the Store. What do you want to do?",
     colorPalette: () => {
       document.querySelector(':root').style.setProperty('--page-background', '#a09050');
       document.querySelector(':root').style.setProperty('--textbox-color', '#a09000');
-      document.querySelector(':root').style.setProperty('--game-text', "#000");
+      document.querySelector(':root').style.setProperty('--game-text', "#fff");
 
     }
   }
-]
+];
 
-// Initialize query Selectors (pointers)
-const button1 = document.querySelector('#button1');
-const button2 = document.querySelector('#button2');
-const button3 = document.querySelector('#button3');
-const button4 = document.querySelector('#button4');
-const shortStats = document.querySelector('#short-stats');
-const battleStats = document.querySelector('#battle-stats');
-const strengthText = document.getElementById('strength-text');
-const defenseText = document.getElementById('defense-text');
-const xpText = document.querySelector('#xpText'); 
-const levelText = document.querySelector('#levelText');
-const goldText = document.querySelector('#goldText');
-const inventorySection = document.querySelector('#inventory');
-const inventoryList = document.querySelector('#inventory-list');
-const storeSection = document.querySelector("#store-section");
-
-// Initialize buttons
-button1.onclick = goMenu;
-button2.onclick = goStore;
-button3.onclick = goHome;
-button4.onclick = goForest;
-
-const renderStats = () => {
-    document.getElementById("health-text").textContent = self.battleStats.health;
-    document.getElementById("max-health-text").textContent = self.battleStats.maxHealth;
-    xpText.textContent = self.xp;
-    levelText.textContent = self.level;
-    strengthText.textContent = self.battleStats.strength;
-    defenseText.textContent = self.battleStats.defense;
-    goldText.textContent = self.gold;
+function renderStats() {
+    statSelectors.healthText.textContent = self.battleStats.health;
+    statSelectors.maxHealthText.textContent = self.battleStats.maxHealth;
+    statSelectors.xpText.textContent = self.xp;
+    statSelectors.levelText.textContent = self.level;
+    statSelectors.strengthText.textContent = self.battleStats.strength;
+    statSelectors.defenseText.textContent = self.battleStats.defense;
+    statSelectors.goldText.textContent = self.gold;
 }
 
 
@@ -156,44 +176,38 @@ function update(location){
     renderStats();
 }
 
-/* NEW TODO: Try to find a way to dynamically render buttons */
-const renderButtons = (location) => {
-    button1.innerText = location["button text"][0];
-    button2.innerText = location["button text"][1];
-    button3.innerText = location["button text"][2];
-    button4.innerText = location["button text"][3];
-    button1.style.display = location["button style display"][0];
-    button2.style.display = location["button style display"][1];
-    button3.style.display = location["button style display"][2];
-    button4.style.display = location["button style display"][3];
-    button1.onclick = location["button functions"][0];
-    button2.onclick = location["button functions"][1];
-    button3.onclick = location["button functions"][2];
-    button4.onclick = location["button functions"][3];
+// Dynamically renders the base buttons of the location.
+function renderButtons(location) {
+
+  // Clean Control Section First
+  sectionSelectors.controlSection.innerHTML = "";
+  for (let i = 0; i < location.buttons.length; i++){
+    sectionSelectors.controlSection.innerHTML += location.buttons[i].renderBtn();
+  };
+  for (let i = 0; i < location.buttons.length; i++){
+    document.getElementById(location.buttons[i].getID()).addEventListener("click", location.buttons[i].getFunction());
+  }
 };
 
-/*
-
-*/
 function goMenu(){
-    update(locations[2]);
+    update(locationSet[2]);
     
-    if (!inventoryList.classList.contains('hide')){
+    if (!sectionSelectors.inventoryList.classList.contains('hide')){
         hideInventory();
     }
-    shortStats.style.display = 'block';
-    battleStats.style.display = 'none';
-    inventorySection.style.display = 'none';
-    
+    showSection(sectionSelectors.shortStats);
+    hideSection(sectionSelectors.battleStats, "hide");
+    hideSection(sectionSelectors.inventorySection, "hide");
 }
 
 function checkStats(){
-    battleStats.style.display = 'block';
-    button1.innerText = "Exit Stats";
-    button2.style.display = 'none';
-    button3.style.display = 'none';
-    button4.style.display = 'none';
-    button1.onclick = goMenu;
+    sectionSelectors.battleStats.classList.toggle("hide");
+    cleanControls();
+  
+    const button = new Button("exit-stats", goMenu, "Exit Stats");
+    sectionSelectors.controlSection.innerHTML = button.renderBtn();
+    document.getElementById(button.getID()).onclick = goMenu;
+   console.log("Yes.");
 }
 
 
@@ -203,13 +217,13 @@ console.log(columnSize);
 
 // INVENTORY SECTION
 
-function checkInventory(){
-    inventorySection.style.display = 'block';
-    button1.innerText = "Exit Inventory";
-    button2.style.display = 'none';
-    button3.style.display = 'none';
-    button4.style.display = 'none';
-    button1.onclick = goMenu;
+function checkInventory() {
+    showSection(sectionSelectors.inventorySection);
+  
+    cleanControls();
+    const button = new Button("exit-inventory", goMenu, "Exit Inventory");
+    sectionSelectors.controlSection.innerHTML = button.renderBtn();
+    document.getElementById(button.getID()).onclick = button.getFunction();
 
     renderInventory();
     
@@ -225,13 +239,13 @@ function checkInventory(){
     
  }
 
-const renderInventory = () => {
-    inventoryList.classList.toggle('hide');
+function renderInventory() {
+    showSection(sectionSelectors.inventoryList);
     for (let i = 0; i < numCols; i++){
         const columnHTML = `<div class="list-column" id="list-column-${i + 1}">
         
         </div>`;
-        inventoryList.insertAdjacentHTML("beforeend", columnHTML);
+        sectionSelectors.inventoryList.insertAdjacentHTML("beforeend", columnHTML);
         const columnPointer = document.querySelector(`#list-column-${i + 1}`);
 
         for (let j = 0; j < columnSize; j++){
@@ -242,30 +256,29 @@ const renderInventory = () => {
 }
 
 function hideInventory(){
-    for (let i = 0; i < inventory.length; i++){
-        
-        const inventoryItem = document.querySelector(`#inventory-item-${i + 1}`);
-        inventoryItem.innerHTML = "";
-    }
-    inventoryList.innerHTML = "";
-    inventoryList.classList.toggle('hide');
+  for (let i = 0; i < inventory.length; i++){
+    const inventoryItem = document.querySelector(`#inventory-item-${i + 1}`);
+    inventoryItem.innerHTML = "";
+  }
+  sectionSelectors.inventoryList.innerHTML = "";
+  hideSection(sectionSelectors.inventoryList); 
 }
 
 
 // GAMEPLAY SECTION
 
 function backToPlay(){
-    shortStats.style.display = 'none';
-    storeSection.style.display = 'none';
-    update(locations[1]);
-}
+    hideSection(sectionSelectors.shortStats);
+    hideSection(sectionSelectors.storeSection);
+    
+    update(locationSet[1]);
+} 
 
 // STORE SECTION
 
 function goStore(){
-    console.log("Going to store.");
-    storeSection.style.display = 'block';
-    update(locations[3]);
+  sectionSelectors.storeSection.classList.toggle('hide');
+  update(locationSet[3]);
 }
 
 function buyItems() {
@@ -274,7 +287,7 @@ function buyItems() {
 
 function buyWeapons() {
     console.log("Buying weapons and defenses.");
-    storeSection.insertAdjacentHTML("beforeend", `
+    sectionSelectors.storeSection.insertAdjacentHTML("beforeend", `
         <div id="weapons-section">
             
         </div>
@@ -298,6 +311,28 @@ function goForest(){
     console.log("Going to Forest.");
 }
 
+function renderList(sectionID, parentSection,) {
+  parentSection.insertAdjacentHTML("beforeend", `
+    <div id="${sectionID}">
+    </div>
+  `);
+}
+function hideSection(sectionReference){
+  if (!sectionReference.classList.contains("hide")){
+    sectionReference.classList.toggle("hide");
+  }
+}
+function showSection(sectionReference){
+  if (sectionReference.classList.contains("hide")){
+    sectionReference.classList.toggle("hide");
+  }
+}
+
 
 //Starts the Game Up
-update(locations[0]);
+update(locationSet[0]);
+
+//Begins Game Function
+function beginGame() {
+  update(locationSet[1]);
+}
